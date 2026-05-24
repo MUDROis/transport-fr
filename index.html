@@ -429,7 +429,7 @@
                 <div class="d-line"><strong>👩 Voyageur:</strong> D'accord. Voilà. Où est le ${platformName} ?</div>
                 <div class="d-line"><strong>👨‍💼 Caissier:</strong> Voilà votre billet. <strong>${cleanTransport}</strong> est à <strong>${platformName} numéro ${platform} (${platformWord})</strong>.</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> Quelle heure est-il ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Il est <strong>${time} heures (${timeWord})</strong>. Bon voyage !</div>
+                <div class="d-line"><strong>👨‍💼 Caissier:</strong> ${time == 1 ? 'Il est <strong>une heure (une)</strong>' : 'Il est <strong>' + time + ' heures (' + timeWord + ')</strong>'}. Bon voyage !</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> Merci beaucoup ! Au revoir !</div>
             `;
         }
