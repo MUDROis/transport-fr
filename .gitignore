@@ -1,1 +1,1 @@
-Nothing should be ignored based on the provided file changes. The modified files (`index-spanish.html` and `index.html`) are HTML source files that should be tracked in version control. No build artifacts, dependencies, or temporary files are present in the change list that would warrant adding ignore rules.
+(index.html and index-spanish.html are source files, no build artifacts, dependencies, or temp files in the changes)
