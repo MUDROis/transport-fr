@@ -160,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <header class="logo-header" onclick="currentSlide = 0; changeSlide(0);">
+        <header class="logo-header" onclick="goToSlide(0);">
             <!-- Local logo file -->
             <img src="logo.png" alt="MUDRO Logo" class="logo" onerror="this.style.display='none'">
             <h1>MUDRO Interactive School </h1>
@@ -484,6 +484,19 @@
             // Refresh dynamic content on slide enter
             if(currentSlide === 3) updateDialogue();
             if(currentSlide === 4) checkQuiz(); // reset or just leave as is
+        }
+
+        function goToSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === slides.length - 1;
+            document.getElementById('slideIndicator').textContent = `${currentSlide + 1} / ${slides.length}`;
+
+            if(currentSlide === 3) updateDialogue();
+            if(currentSlide === 4) checkQuiz();
         }
 
         // --- INIT ---
