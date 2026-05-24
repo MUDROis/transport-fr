@@ -241,14 +241,14 @@
     <script>
         // --- DATA ---
         const vocabData = [
-            {fr: 'le train', en: 'train'},
-            {fr: 'le bus', en: 'bus'},
-            {fr: "l'avion", en: 'plane'},
-            {fr: 'le bateau', en: 'boat'},
-            {fr: 'le métro', en: 'underground'},
-            {fr: 'le taxi', en: 'taxi'},
-            {fr: 'le vélo', en: 'bicycle'},
-            {fr: 'la moto', en: 'motorbike'}
+            {fr: 'le train', en: 'train', icon: '🚄'},
+            {fr: 'le bus', en: 'bus', icon: '🚌'},
+            {fr: "l'avion", en: 'plane', icon: '✈️'},
+            {fr: 'le bateau', en: 'boat', icon: '⛵'},
+            {fr: 'le métro', en: 'underground', icon: '🚇'},
+            {fr: 'le taxi', en: 'taxi', icon: '🚕'},
+            {fr: 'le vélo', en: 'bicycle', icon: '🚲'},
+            {fr: 'la moto', en: 'motorbike', icon: '🏍️'}
         ];
 
         const phrasesData = [
@@ -311,7 +311,7 @@
             vocabData.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.innerHTML = `<span class="audio-icon">🔊</span><div class="fr">${item.fr}</div><div class="ru">${item.en}</div>`;
+                card.innerHTML = `<span class="audio-icon">🔊</span><div class="fr">${item.icon} ${item.fr}</div><div class="ru">${item.en}</div>`;
                 card.onclick = () => {
                     card.classList.toggle('revealed');
                     speak(item.fr);
