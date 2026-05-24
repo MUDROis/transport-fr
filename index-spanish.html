@@ -46,6 +46,10 @@
             padding: 15px 30px;
             background: #fff;
             border-bottom: 2px solid #eee;
+            cursor: pointer;
+        }
+        .logo-header:hover {
+            background: #f9f9f9;
         }
         .logo { width: 50px; height: 50px; object-fit: contain; border-radius: 50%; border: 2px solid #eee; }
         .logo-header h1 { font-size: 1.2rem; color: var(--primary); font-weight: 700; }
@@ -156,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <header class="logo-header">
+        <header class="logo-header" onclick="currentSlide = 0; changeSlide(0);">
             <!-- Local logo file -->
             <img src="logo.png" alt="MUDRO Logo" class="logo" onerror="this.style.display='none'">
             <h1>MUDRO Interactive School </h1>
@@ -372,6 +376,12 @@
             const time = document.getElementById('timeSelect').value;
             const display = document.getElementById('dialogueDisplay');
 
+            // Spanish number words mapping (1-10)
+            const spanishNumbers = {
+                '1': 'uno', '2': 'dos', '3': 'tres', '4': 'cuatro', '5': 'cinco',
+                '6': 'seis', '7': 'siete', '8': 'ocho', '9': 'nueve', '10': 'diez'
+            };
+
             // Mapping transport to location type (Spanish)
             const locationMap = {
                 'el tren': 'la estación',
@@ -397,16 +407,21 @@
             const location = locationMap[transport] || 'la estación';
             const platformName = platformNameMap[location] || 'andén';
 
+            // Get Spanish word forms
+            const priceWord = spanishNumbers[price] || price;
+            const platformWord = spanishNumbers[platform] || platform;
+            const timeWord = spanishNumbers[time] || time;
+
             display.innerHTML = `
                 <div class="d-line"><strong>👨‍💼 Taquillero:</strong> ¡Buenos días! ¿Destino?</div>
                 <div class="d-line"><strong>👩 Viajero:</strong> ¡Buenos días! Quisiera un billete para <strong>${city}</strong>.</div>
                 <div class="d-line"><strong>👨‍💼 Taquillero:</strong> ¿Solo ida o ida y vuelta?</div>
                 <div class="d-line"><strong>👩 Viajero:</strong> Ida y vuelta, por favor. ¿Cuánto cuesta?</div>
-                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> Cuesta <strong>${price} euros</strong>.</div>
+                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> Cuesta <strong>${price} euros (${priceWord})</strong>.</div>
                 <div class="d-line"><strong>👩 Viajero:</strong> De acuerdo. Aquí tiene. ¿Dónde está el ${platformName}?</div>
-                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> Aquí tiene su billete. <strong>${cleanTransport}</strong> está en el <strong>${platformName} número ${platform}</strong>.</div>
+                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> Aquí tiene su billete. <strong>${cleanTransport}</strong> está en el <strong>${platformName} número ${platform} (${platformWord})</strong>.</div>
                 <div class="d-line"><strong>👩 Viajero:</strong> ¿Qué hora es?</div>
-                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> Son las <strong>${time} horas</strong>. ¡Buen viaje!</div>
+                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> Son las <strong>${time} horas (${timeWord})</strong>. ¡Buen viaje!</div>
                 <div class="d-line"><strong>👩 Viajero:</strong> ¡Muchas gracias! ¡Adiós!</div>
             `;
         }
