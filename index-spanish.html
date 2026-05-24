@@ -91,8 +91,8 @@
         }
         .card:hover { border-color: var(--accent); background: #f9f9f9; }
         .card .fr { font-weight: bold; font-size: 1.1rem; }
-        .card .ru { font-size: 0.85rem; color: #7f8c8d; margin-top: 5px; display: none; }
-        .card.revealed .ru { display: block; color: var(--primary); }
+        .card .es { font-size: 0.85rem; color: #7f8c8d; margin-top: 5px; display: none; }
+        .card.revealed .es { display: block; color: var(--primary); }
         .audio-icon { position: absolute; top: 5px; right: 5px; font-size: 12px; opacity: 0.5; }
         .card:hover .audio-icon { opacity: 1; color: var(--accent); }
 
@@ -187,9 +187,9 @@
                 <div class="grid" id="vocabGrid"></div>
                 <div class="rule-box">
                     <strong>📏 Rule (How to say "by..."):</strong><br>
-                    • Open transport (bike, foot) → <strong>à</strong> (à vélo, à pied).<br>
-                    • Enclosed transport (bus, car, train) → <strong>en</strong> (en bus, en voiture, en train).<br>
-                    • Exceptions: <strong>à moto</strong>, <strong>à cheval</strong>.
+                    • Open transport (bike, foot) → <strong>a</strong> (a bicicleta, a pie).<br>
+                    • Enclosed transport (bus, car, train) → <strong>en</strong> (en autobús, en coche, en tren).<br>
+                    • Exceptions: <strong>a moto</strong>, <strong>a caballo</strong>.
                 </div>
             </div>
 
@@ -207,18 +207,18 @@
                 
                 <div class="controls-row">
                     <select id="transportSelect">
-                        <option value="le train">🚄 le train</option>
-                        <option value="l'avion">✈️ l'avion</option>
-                        <option value="le bus">🚌 le bus</option>
-                        <option value="le métro">🚇 le métro</option>
-                        <option value="le bateau">⛵ le bateau</option>
+                        <option value="el tren">🚄 el tren</option>
+                        <option value="el avión">✈️ el avión</option>
+                        <option value="el autobús">🚌 el autobús</option>
+                        <option value="el metro">🚇 el metro</option>
+                        <option value="el barco">⛵ el barco</option>
                     </select>
                     <select id="citySelect">
-                        <option value="Paris">Paris</option>
-                        <option value="Lyon">Lyon</option>
-                        <option value="Marseille">Marseille</option>
-                        <option value="Nice">Nice</option>
-                        <option value="Bordeaux">Bordeaux</option>
+                        <option value="Madrid">Madrid</option>
+                        <option value="Barcelona">Barcelona</option>
+                        <option value="Valencia">Valencia</option>
+                        <option value="Sevilla">Sevilla</option>
+                        <option value="Bilbao">Bilbao</option>
                     </select>
                 </div>
 
@@ -274,55 +274,54 @@
     <script>
         // --- DATA ---
         const vocabData = [
-            {fr: 'le train', en: 'train', icon: '🚄'},
-            {fr: 'le bus', en: 'bus', icon: '🚌'},
-            {fr: "l'avion", en: 'plane', icon: '✈️'},
-            {fr: 'le bateau', en: 'boat', icon: '⛵'},
-            {fr: 'le métro', en: 'underground', icon: '🚇'},
-            {fr: 'le taxi', en: 'taxi', icon: '🚕'},
-            {fr: 'le vélo', en: 'bicycle', icon: '🚲'},
-            {fr: 'la moto', en: 'motorbike', icon: '🏍️'}
+            {es: 'el tren', en: 'train', icon: '🚄'},
+            {es: 'el autobús', en: 'bus', icon: '🚌'},
+            {es: "el avión", en: 'plane', icon: '✈️'},
+            {es: 'el barco', en: 'boat', icon: '⛵'},
+            {es: 'el metro', en: 'underground', icon: '🚇'},
+            {es: 'el taxi', en: 'taxi', icon: '🚕'},
+            {es: 'la bicicleta', en: 'bicycle', icon: '🚲'},
+            {es: 'la moto', en: 'motorbike', icon: '🏍️'}
         ];
 
         const phrasesData = [
-            {fr: "Je voudrais un billet pour...", en: "I would like a ticket for..."},
-            {fr: "Un aller simple ou aller-retour ?", en: "One way or round trip?"},
-            {fr: "C'est combien ?", en: "How much is it?"},
-            {fr: "Où est le quai numéro... ?", en: "Where is platform number...?"},
-            {fr: "Bon voyage !", en: "Have a good trip!"},
-            {fr: "Quelle heure est-il ?", en: "What time is it?"}
+            {es: "Quisiera un billete para...", en: "I would like a ticket for..."},
+            {es: "¿Solo ida o ida y vuelta?", en: "One way or round trip?"},
+            {es: "¿Cuánto cuesta?", en: "How much is it?"},
+            {es: "¿Dónde está el andén número...?", en: "Where is platform number...?"},
+            {es: "¡Buen viaje!", en: "Have a good trip!"},
+            {es: "¿Qué hora es?", en: "What time is it?"}
         ];
 
         const quizData = [
             {
-                q: "How do you say 'How much is it?'",
-                opts: ["Où est le bus?", "C'est combien?", "Je voudrais..."],
+                q: "How do you say 'How much is it?' in Spanish",
+                opts: ["¿Dónde está el autobús?", "¿Cuánto cuesta?", "Quisiera..."],
                 correct: 1
             },
             {
-                // FIXED Q2: Question now provides the blank instead of giving away the preposition
-                q: "Complete: 'Je voudrais un billet ___ Paris.'",
-                opts: ["à", "pour", "en"],
+                q: "Complete: 'Quisiera un billete ___ Madrid.'",
+                opts: ["a", "para", "en"],
                 correct: 1
             },
             {
-                q: "Which preposition for 'train'?",
-                opts: ["à train", "au train", "en train"],
+                q: "Which preposition for 'train' (en tren)?",
+                opts: ["a tren", "al tren", "en tren"],
                 correct: 2
             },
             {
-                q: "Translate: 'Aller-retour'",
+                q: "Translate: 'Ida y vuelta'",
                 opts: ["Return ticket", "One way", "Ticket office"],
                 correct: 0
             },
             {
-                q: "What does 'Bon voyage' mean?",
+                q: "What does 'Buen viaje' mean?",
                 opts: ["Good morning", "Good trip", "Good night"],
                 correct: 1
             },
             {
                 q: "Where do you buy a ticket?",
-                opts: ["Au quai", "Au guichet", "En classe"],
+                opts: ["En el andén", "En la taquilla", "En clase"],
                 correct: 1
             }
         ];
@@ -332,7 +331,7 @@
         function speak(text) {
             if (synth.speaking) synth.cancel();
             const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = 'fr-FR';
+            utter.lang = 'es-ES';
             utter.rate = 0.9; // Slightly slower for A1
             synth.speak(utter);
         }
@@ -344,10 +343,10 @@
             vocabData.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.innerHTML = `<span class="audio-icon">🔊</span><div class="fr">${item.icon} ${item.fr}</div><div class="ru">${item.en}</div>`;
+                card.innerHTML = `<span class="audio-icon">🔊</span><div class="fr">${item.icon} ${item.es}</div><div class="es">${item.en}</div>`;
                 card.onclick = () => {
                     card.classList.toggle('revealed');
-                    speak(item.fr);
+                    speak(item.es);
                 };
                 grid.appendChild(card);
             });
@@ -359,8 +358,8 @@
             phrasesData.forEach(item => {
                 const el = document.createElement('div');
                 el.className = 'phrase-item';
-                el.innerHTML = `<div class="phrase-fr">🔊 ${item.fr}</div><div class="phrase-en">${item.en}</div>`;
-                el.onclick = () => speak(item.fr);
+                el.innerHTML = `<div class="phrase-fr">🔊 ${item.es}</div><div class="phrase-en">${item.en}</div>`;
+                el.onclick = () => speak(item.es);
                 list.appendChild(el);
             });
         }
@@ -373,48 +372,42 @@
             const time = document.getElementById('timeSelect').value;
             const display = document.getElementById('dialogueDisplay');
 
-            // Mapping transport to location type
+            // Mapping transport to location type (Spanish)
             const locationMap = {
-                'le train': 'la gare',
-                'le bus': 'la gare routière',
-                "l'avion": "l'aéroport",
-                'le métro': 'la station de métro',
-                'le bateau': 'le port'
+                'el tren': 'la estación',
+                'el autobús': 'la estación de autobuses',
+                "el avión": 'el aeropuerto',
+                'el metro': 'la estación de metro',
+                'el barco': 'el puerto'
             };
 
-            // Mapping location type to platform/exit name
+            // Mapping location type to platform/exit name (Spanish)
             const platformNameMap = {
-                'la gare': 'quai',
-                'la gare routière': 'quai',
-                "l'aéroport": 'porte',
-                'la station de métro': 'quai',
-                'le port': 'quai'
+                'la estación': 'andén',
+                'la estación de autobuses': 'andén',
+                'el aeropuerto': 'puerta',
+                'la estación de metro': 'andén',
+                'el puerto': 'muelle'
             };
 
-            // Determine article (le/la/l') for "Where is the..."
-            let article = "le";
-            if (transport === "l'avion") article = ""; 
-            else if (transport === "la trottinette") article = "la";
-
-            const displayTransport = transport.startsWith("l'") ? transport : `le ${transport.replace('le ', '')}`;
             // Clean up selection value for logic
-            const cleanTransport = transport.replace("le ", "").replace("la ", "").replace("l'", "");
+            const cleanTransport = transport.replace("el ", "").replace("la ", "");
             
             // Get location and platform name based on transport
-            const location = locationMap[transport] || 'la gare';
-            const platformName = platformNameMap[location] || 'quai';
+            const location = locationMap[transport] || 'la estación';
+            const platformName = platformNameMap[location] || 'andén';
 
             display.innerHTML = `
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Bonjour ! Destination ?</div>
-                <div class="d-line"><strong>👩 Voyageur:</strong> Bonjour ! Je voudrais un billet pour <strong>${city}</strong>.</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Aller simple ou aller-retour ?</div>
-                <div class="d-line"><strong>👩 Voyageur:</strong> Aller-retour, s'il vous plaît. C'est combien ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> C'est <strong>${price} euros</strong>.</div>
-                <div class="d-line"><strong>👩 Voyageur:</strong> D'accord. Voilà. Où est le ${platformName} ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Voilà votre billet. <strong>${cleanTransport}</strong> est à <strong>${platformName} numéro ${platform}</strong>.</div>
-                <div class="d-line"><strong>👩 Voyageur:</strong> Quelle heure est-il ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Il est <strong>${time} heures</strong>. Bon voyage !</div>
-                <div class="d-line"><strong>👩 Voyageur:</strong> Merci beaucoup ! Au revoir !</div>
+                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> ¡Buenos días! ¿Destino?</div>
+                <div class="d-line"><strong>👩 Viajero:</strong> ¡Buenos días! Quisiera un billete para <strong>${city}</strong>.</div>
+                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> ¿Solo ida o ida y vuelta?</div>
+                <div class="d-line"><strong>👩 Viajero:</strong> Ida y vuelta, por favor. ¿Cuánto cuesta?</div>
+                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> Cuesta <strong>${price} euros</strong>.</div>
+                <div class="d-line"><strong>👩 Viajero:</strong> De acuerdo. Aquí tiene. ¿Dónde está el ${platformName}?</div>
+                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> Aquí tiene su billete. <strong>${cleanTransport}</strong> está en el <strong>${platformName} número ${platform}</strong>.</div>
+                <div class="d-line"><strong>👩 Viajero:</strong> ¿Qué hora es?</div>
+                <div class="d-line"><strong>👨‍💼 Taquillero:</strong> Son las <strong>${time} horas</strong>. ¡Buen viaje!</div>
+                <div class="d-line"><strong>👩 Viajero:</strong> ¡Muchas gracias! ¡Adiós!</div>
             `;
         }
 
