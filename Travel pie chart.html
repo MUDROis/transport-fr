@@ -27,80 +27,200 @@
             border-radius: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.25);
             padding: 30px;
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             text-align: center;
         }
-        h1 { color: var(--accent); margin-bottom: 20px; }
+        h1 { color: var(--accent); margin-bottom: 10px; }
+        .subtitle {
+            color: #6c757d;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+        
+        /* Input Section Styles */
+        .input-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .input-group:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .input-group label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 1em;
+        }
+        .icon { font-size: 1.2em; }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            text-align: center;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        /* Color-coded borders */
+        #transportInput { border-color: #3498db; }
+        #accommodationInput { border-color: #9b59b6; }
+        #foodInput { border-color: #e74c3c; }
+        #activitiesInput { border-color: #2ecc71; }
+        #shoppingInput { border-color: #f39c12; }
+        
         .chart-container {
             position: relative;
             height: 400px;
             margin: 20px auto;
             max-width: 500px;
         }
-        .back-btn {
+        .total-budget {
+            text-align: center;
+            font-size: 1.4em;
+            color: var(--primary);
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .total-budget strong {
+            color: var(--accent);
+            font-size: 1.3em;
+        }
+        .reset-btn {
             display: inline-block;
             margin-top: 20px;
             padding: 12px 30px;
             background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1em;
+        }
+        .reset-btn:hover { background: #c0392b; }
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: #6c757d;
             color: white;
             text-decoration: none;
             border-radius: 8px;
             font-weight: bold;
             transition: 0.2s;
         }
-        .back-btn:hover { background: #c0392b; }
-        .budget-summary {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
+        .back-btn:hover { background: #5a6268; }
+        
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.8em; }
+            .input-section { grid-template-columns: 1fr; }
         }
-        .budget-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .budget-item:last-child { border-bottom: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>💰 Travel Budget Breakdown</h1>
-        <p style="margin-bottom: 15px;">Visualize your travel expenses</p>
+        <p class="subtitle">Edit your expenses and see the chart update</p>
+        
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="input-group">
+                <label>
+                    <span class="icon">🚆</span>
+                    Transport
+                </label>
+                <input type="number" id="transportInput" placeholder="€" value="120" min="0">
+            </div>
+            <div class="input-group">
+                <label>
+                    <span class="icon">🏨</span>
+                    Accommodation
+                </label>
+                <input type="number" id="accommodationInput" placeholder="€" value="200" min="0">
+            </div>
+            <div class="input-group">
+                <label>
+                    <span class="icon">🍽️</span>
+                    Food
+                </label>
+                <input type="number" id="foodInput" placeholder="€" value="150" min="0">
+            </div>
+            <div class="input-group">
+                <label>
+                    <span class="icon">🎯</span>
+                    Activities
+                </label>
+                <input type="number" id="activitiesInput" placeholder="€" value="80" min="0">
+            </div>
+            <div class="input-group">
+                <label>
+                    <span class="icon">🛍️</span>
+                    Shopping
+                </label>
+                <input type="number" id="shoppingInput" placeholder="€" value="50" min="0">
+            </div>
+        </div>
         
         <div class="chart-container">
             <canvas id="budgetChart"></canvas>
         </div>
         
-        <div class="budget-summary">
-            <h3 style="margin-bottom: 10px;">Budget Summary</h3>
-            <div class="budget-item"><span>🚆 Transport</span><span>€120</span></div>
-            <div class="budget-item"><span>🏨 Accommodation</span><span>€200</span></div>
-            <div class="budget-item"><span>🍽️ Food</span><span>€150</span></div>
-            <div class="budget-item"><span>🎯 Activities</span><span>€80</span></div>
-            <div class="budget-item"><span>🛍️ Shopping</span><span>€50</span></div>
-            <div class="budget-item"><span>Total</span><span>€600</span></div>
+        <div class="total-budget">
+            Total Budget: <strong id="totalAmount">€600</strong>
         </div>
         
+        <button class="reset-btn" onclick="resetValues()">Reset to Default</button>
+        <br>
         <a href="index.html" class="back-btn">← Back to Lesson</a>
     </div>
 
     <script>
+        // Colors matching the categories
+        const colors = {
+            transport: '#3498db',
+            accommodation: '#9b59b6',
+            food: '#e74c3c',
+            activities: '#2ecc71',
+            shopping: '#f39c12'
+        };
+
+        // Initialize chart
         const ctx = document.getElementById('budgetChart').getContext('2d');
-        const budgetChart = new Chart(ctx, {
+        let budgetChart = new Chart(ctx, {
             type: 'pie',
             data: {
                 labels: ['Transport', 'Accommodation', 'Food', 'Activities', 'Shopping'],
                 datasets: [{
                     data: [120, 200, 150, 80, 50],
                     backgroundColor: [
-                        '#3498db',
-                        '#9b59b6',
-                        '#e74c3c',
-                        '#2ecc71',
-                        '#f39c12'
+                        colors.transport,
+                        colors.accommodation,
+                        colors.food,
+                        colors.activities,
+                        colors.shopping
                     ],
                     borderWidth: 2,
                     borderColor: '#fff'
@@ -114,7 +234,9 @@
                         position: 'bottom',
                         labels: {
                             font: { size: 14 },
-                            padding: 15
+                            padding: 15,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
                         }
                     },
                     tooltip: {
@@ -127,9 +249,58 @@
                             }
                         }
                     }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
                 }
             }
         });
+
+        // Get all inputs
+        const inputs = {
+            transport: document.getElementById('transportInput'),
+            accommodation: document.getElementById('accommodationInput'),
+            food: document.getElementById('foodInput'),
+            activities: document.getElementById('activitiesInput'),
+            shopping: document.getElementById('shoppingInput')
+        };
+
+        // Update chart on input change
+        function updateChart() {
+            const values = [
+                parseFloat(inputs.transport.value) || 0,
+                parseFloat(inputs.accommodation.value) || 0,
+                parseFloat(inputs.food.value) || 0,
+                parseFloat(inputs.activities.value) || 0,
+                parseFloat(inputs.shopping.value) || 0
+            ];
+
+            budgetChart.data.datasets[0].data = values;
+            budgetChart.update();
+
+            // Update total
+            const total = values.reduce((a, b) => a + b, 0);
+            document.getElementById('totalAmount').textContent = '€' + total.toLocaleString();
+        }
+
+        // Add event listeners to all inputs
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', updateChart);
+        });
+
+        // Reset function
+        function resetValues() {
+            inputs.transport.value = 120;
+            inputs.accommodation.value = 200;
+            inputs.food.value = 150;
+            inputs.activities.value = 80;
+            inputs.shopping.value = 50;
+            updateChart();
+        }
+
+        // Initialize total on page load
+        updateChart();
     </script>
 </body>
 </html>
