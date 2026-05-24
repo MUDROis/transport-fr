@@ -218,6 +218,35 @@
                     </select>
                 </div>
 
+                <div class="controls-row">
+                    <select id="priceSelect">
+                        <option value="10">10 €</option>
+                        <option value="15">15 €</option>
+                        <option value="20" selected>20 €</option>
+                        <option value="25">25 €</option>
+                        <option value="30">30 €</option>
+                    </select>
+                    <select id="platformSelect">
+                        <option value="1">Quai 1</option>
+                        <option value="2">Quai 2</option>
+                        <option value="3" selected>Quai 3</option>
+                        <option value="4">Quai 4</option>
+                        <option value="5">Quai 5</option>
+                    </select>
+                    <select id="timeSelect">
+                        <option value="1">1 h</option>
+                        <option value="2">2 h</option>
+                        <option value="3">3 h</option>
+                        <option value="4">4 h</option>
+                        <option value="5">5 h</option>
+                        <option value="6">6 h</option>
+                        <option value="7">7 h</option>
+                        <option value="8">8 h</option>
+                        <option value="9">9 h</option>
+                        <option value="10">10 h</option>
+                    </select>
+                </div>
+
                 <div class="dialogue-display" id="dialogueDisplay">
                     <!-- Dynamic Content Here -->
                 </div>
@@ -335,6 +364,9 @@
         function updateDialogue() {
             const transport = document.getElementById('transportSelect').value;
             const city = document.getElementById('citySelect').value;
+            const price = document.getElementById('priceSelect').value;
+            const platform = document.getElementById('platformSelect').value;
+            const time = document.getElementById('timeSelect').value;
             const display = document.getElementById('dialogueDisplay');
 
             // Determine article (le/la/l') for "Where is the..."
@@ -351,11 +383,11 @@
                 <div class="d-line"><strong>👩 Voyageur:</strong> Bonjour ! Je voudrais un billet pour <strong>${city}</strong>.</div>
                 <div class="d-line"><strong>👨‍💼 Caissier:</strong> Aller simple ou aller-retour ?</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> Aller-retour, s'il vous plaît. C'est combien ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> C'est 20 vingt euros.</div>
+                <div class="d-line"><strong>👨‍💼 Caissier:</strong> C'est <strong>${price} euros</strong>.</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> D'accord. Voilà. Où est le quai ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Voilà votre billet. <strong>${cleanTransport}</strong> est à quai numéro 3.</div>
+                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Voilà votre billet. <strong>${cleanTransport}</strong> est à <strong>quai numéro ${platform}</strong>.</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> Quelle heure est-il ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Il est 4 heurs. Bon voyage !</div>
+                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Il est <strong>${time} heures</strong>. Bon voyage !</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> Merci beaucoup ! Au revoir !</div>
             `;
         }
@@ -428,6 +460,9 @@
             // Listeners for Slide 4
             document.getElementById('transportSelect').addEventListener('change', updateDialogue);
             document.getElementById('citySelect').addEventListener('change', updateDialogue);
+            document.getElementById('priceSelect').addEventListener('change', updateDialogue);
+            document.getElementById('platformSelect').addEventListener('change', updateDialogue);
+            document.getElementById('timeSelect').addEventListener('change', updateDialogue);
             updateDialogue();
 
             // Button for Quiz check inside the quiz slide if we want, 
