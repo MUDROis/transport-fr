@@ -1,1 +1,1 @@
-(index.html and index-spanish.html are source files, no build artifacts, dependencies, or temp files detected)
+Nothing should be ignored since the changes only include HTML files which are source code/config files.
