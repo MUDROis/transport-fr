@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À la Gare — Interactive A1 | MURO</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            /* Fallback background if local file missing */
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            background-image: url('background.jpg'), linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            background-size: cover, cover;
+            background-position: center, center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--primary);
+        }
+        .app-container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 85vh; /* Fixed height for consistent layout */
+        }
+        .logo-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 30px;
+            background: #fff;
+            border-bottom: 2px solid #eee;
+        }
+        .logo { width: 50px; height: 50px; object-fit: contain; border-radius: 50%; border: 2px solid #eee; }
+        .logo-header h1 { font-size: 1.2rem; color: var(--primary); font-weight: 700; }
+        
+        .slide-wrapper {
+            flex: 1;
+            position: relative;
+            padding: 20px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.5);
+        }
+        .slide {
+            position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+            padding: 20px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.4s ease;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Allow scrolling if content overflows */
+        }
+        .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        
+        h2 { color: var(--accent); margin-bottom: 15px; font-size: 1.5rem; text-align: center; }
+        
+        /* Vocab Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; width: 100%; }
+        .card {
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100px;
+            position: relative;
+        }
+        .card:hover { border-color: var(--accent); background: #f9f9f9; }
+        .card .fr { font-weight: bold; font-size: 1.1rem; }
+        .card .ru { font-size: 0.85rem; color: #7f8c8d; margin-top: 5px; display: none; }
+        .card.revealed .ru { display: block; color: var(--primary); }
+        .audio-icon { position: absolute; top: 5px; right: 5px; font-size: 12px; opacity: 0.5; }
+        .card:hover .audio-icon { opacity: 1; color: var(--accent); }
+
+        /* Phrases */
+        .phrase-item {
+            background: #fff;
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
+        .phrase-item:hover { transform: translateX(5px); }
+        .phrase-fr { font-weight: bold; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+        .phrase-en { font-size: 0.9rem; color: #555; margin-top: 5px; }
+
+        /* Rule Box */
+        .rule-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Dialogue Generator */
+        .controls-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        select { padding: 10px; border-radius: 8px; border: 2px solid #ddd; font-size: 1rem; min-width: 150px; cursor: pointer; }
+        .dialogue-display {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 600px;
+            border: 2px solid #e9ecef;
+        }
+        .d-line { margin-bottom: 12px; padding: 10px; border-radius: 8px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .d-line strong { color: var(--accent); }
+
+        /* Quiz */
+        .quiz-q { margin-bottom: 15px; padding: 10px; background: #fff; border-radius: 8px; }
+        .quiz-opts label { display: block; margin: 5px 0; cursor: pointer; padding: 5px; border-radius: 5px; transition: 0.2s; }
+        .quiz-opts label:hover { background: #f0f0f0; }
+        
+        .controls {
+            display: flex; justify-content: space-between; padding: 15px 30px;
+            background: #fff; border-top: 2px solid #eee;
+        }
+        button {
+            background: var(--accent); color: #fff; border: none; padding: 10px 20px;
+            border-radius: 8px; cursor: pointer; font-size: 1rem; transition: 0.2s;
+        }
+        button:hover { background: #c0392b; }
+        button:disabled { background: #bdc3c7; cursor: not-allowed; }
+        
+        .feedback { text-align: center; margin-top: 10px; font-weight: bold; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="logo-header">
+            <!-- Local logo file -->
+            <img src="logo.png" alt="MURO Logo" class="logo" onerror="this.style.display='none'">
+            <h1>MURO Interactive School</h1>
+        </header>
+
+        <main class="slide-wrapper">
+            <!-- SLIDE 1: Welcome -->
+            <div class="slide active" id="slide1">
+                <h2>🚄 À la gare — Transport & Travel</h2>
+                <div style="text-align: center; margin-top: 30px;">
+                    <p style="font-size: 1.2rem; margin-bottom: 20px;">Level A1 • Interactive Slides</p>
+                    <div style="background:#fff; padding:20px; border-radius:12px; max-width:400px; margin:0 auto;">
+                        <p>🎯 <strong>Goal:</strong> Confidently buy a ticket for a train/bus/plane.</p>
+                        <p>🗣️ <strong>Audio:</strong> Click any card or phrase to hear pronunciation!</p>
+                        <p>🔧 <strong>Practice:</strong> Create your own dialogue and take the quiz.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 2: Vocabulary & Grammar -->
+            <div class="slide" id="slide2">
+                <h2>🚌 Transport & Prepositions</h2>
+                <p style="text-align:center; margin-bottom:10px; font-size:0.9rem;">🔊 Click a card to hear</p>
+                <div class="grid" id="vocabGrid"></div>
+                <div class="rule-box">
+                    <strong>📏 Rule (How to say "by..."):</strong><br>
+                    • Open transport (bike, foot) → <strong>à</strong> (à vélo, à pied).<br>
+                    • Enclosed transport (bus, car, train) → <strong>en</strong> (en bus, en voiture, en train).<br>
+                    • Exceptions: <strong>à moto</strong>, <strong>à cheval</strong>.
+                </div>
+            </div>
+
+            <!-- SLIDE 3: Key Phrases -->
+            <div class="slide" id="slide3">
+                <h2>🎫 Buying a Ticket</h2>
+                <p style="text-align:center; margin-bottom:10px; font-size:0.9rem;">🔊 Click to listen and translate</p>
+                <div id="phraseList"></div>
+            </div>
+
+            <!-- SLIDE 4: Dialogue Generator -->
+            <div class="slide" id="slide4">
+                <h2>💬 Dialogue Generator</h2>
+                <p style="text-align:center; margin-bottom:15px;">Select options to build your dialogue:</p>
+                
+                <div class="controls-row">
+                    <select id="transportSelect">
+                        <option value="le train">🚄 le train</option>
+                        <option value="l'avion">✈️ l'avion</option>
+                        <option value="le bus">🚌 le bus</option>
+                        <option value="le métro">🚇 le métro</option>
+                        <option value="le bateau">⛵ le bateau</option>
+                    </select>
+                    <select id="citySelect">
+                        <option value="Paris">Paris</option>
+                        <option value="Lyon">Lyon</option>
+                        <option value="Marseille">Marseille</option>
+                        <option value="Nice">Nice</option>
+                        <option value="Bordeaux">Bordeaux</option>
+                    </select>
+                </div>
+
+                <div class="dialogue-display" id="dialogueDisplay">
+                    <!-- Dynamic Content Here -->
+                </div>
+            </div>
+
+            <!-- SLIDE 5: Quiz -->
+            <div class="slide" id="slide5">
+                <h2>🎯 Knowledge Check</h2>
+                <div id="quizArea"></div>
+                <div class="feedback" id="quizFeedback"></div>
+            </div>
+        </main>
+
+        <footer class="controls">
+            <button id="prevBtn" onclick="changeSlide(-1)" disabled>← Back</button>
+            <span id="slideIndicator">1 / 5</span>
+            <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const vocabData = [
+            {fr: 'le train', en: 'train'},
+            {fr: 'le bus', en: 'bus'},
+            {fr: "l'avion", en: 'plane'},
+            {fr: 'le bateau', en: 'boat'},
+            {fr: 'le métro', en: 'subway'},
+            {fr: 'le taxi', en: 'taxi'},
+            {fr: 'le vélo', en: 'bicycle'},
+            {fr: 'la moto', en: 'motorbike'}
+        ];
+
+        const phrasesData = [
+            {fr: "Je voudrais un billet pour...", en: "I would like a ticket for..."},
+            {fr: "Un aller simple ou aller-retour?", en: "One way or round trip?"},
+            {fr: "C'est combien?", en: "How much is it?"},
+            {fr: "Où est le quai numéro...?", en: "Where is platform number...?"},
+            {fr: "Bon voyage!", en: "Have a good trip!"},
+            {fr: "C'est quelle heure?", en: "What time is it?"}
+        ];
+
+        const quizData = [
+            {
+                q: "How do you say 'How much is it?'",
+                opts: ["Où est le bus?", "C'est combien?", "Je voudrais..."],
+                correct: 1
+            },
+            {
+                // FIXED Q2: Question now provides the blank instead of giving away the preposition
+                q: "Complete: 'Je voudrais un billet ___ Paris.'",
+                opts: ["à", "pour", "en"],
+                correct: 1
+            },
+            {
+                q: "Which preposition for 'train'?",
+                opts: ["à train", "au train", "en train"],
+                correct: 2
+            },
+            {
+                q: "Translate: 'Aller-retour'",
+                opts: ["Return ticket", "One way", "Ticket office"],
+                correct: 0
+            },
+            {
+                q: "What does 'Bon voyage' mean?",
+                opts: ["Good morning", "Good trip", "Good night"],
+                correct: 1
+            },
+            {
+                q: "Where do you buy a ticket?",
+                opts: ["Au quai", "Au guichet", "En classe"],
+                correct: 1
+            }
+        ];
+
+        // --- AUDIO ---
+        const synth = window.speechSynthesis;
+        function speak(text) {
+            if (synth.speaking) synth.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'fr-FR';
+            utter.rate = 0.9; // Slightly slower for A1
+            synth.speak(utter);
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderVocab() {
+            const grid = document.getElementById('vocabGrid');
+            grid.innerHTML = '';
+            vocabData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `<span class="audio-icon">🔊</span><div class="fr">${item.fr}</div><div class="ru">${item.en}</div>`;
+                card.onclick = () => {
+                    card.classList.toggle('revealed');
+                    speak(item.fr);
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        function renderPhrases() {
+            const list = document.getElementById('phraseList');
+            list.innerHTML = '';
+            phrasesData.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'phrase-item';
+                el.innerHTML = `<div class="phrase-fr">🔊 ${item.fr}</div><div class="phrase-en">${item.en}</div>`;
+                el.onclick = () => speak(item.fr);
+                list.appendChild(el);
+            });
+        }
+
+        function updateDialogue() {
+            const transport = document.getElementById('transportSelect').value;
+            const city = document.getElementById('citySelect').value;
+            const display = document.getElementById('dialogueDisplay');
+
+            // Determine article (le/la/l') for "Where is the..."
+            let article = "le";
+            if (transport === "l'avion") article = ""; 
+            else if (transport === "la trottinette") article = "la";
+
+            const displayTransport = transport.startsWith("l'") ? transport : `le ${transport.replace('le ', '')}`;
+            // Clean up selection value for logic
+            const cleanTransport = transport.replace("le ", "").replace("la ", "").replace("l'", "");
+
+            display.innerHTML = `
+                <div class="d-line"><strong>👨‍💼 Agent:</strong> Bonjour! Destination?</div>
+                <div class="d-line"><strong>👩 Voyageur:</strong> Bonjour! Je voudrais un billet pour <strong>${city}</strong>.</div>
+                <div class="d-line"><strong>👨‍💼 Agent:</strong> Aller simple ou aller-retour?</div>
+                <div class="d-line"><strong>👩 Voyageur:</strong> Aller-retour, s'il vous plaît.</div>
+                <div class="d-line"><strong>👨‍💼 Agent:</strong> Voilà votre billet. <strong>${cleanTransport}</strong> est à quai numéro 3. Bon voyage!</div>
+                <div class="d-line"><strong>👩 Voyageur:</strong> Merci beaucoup! Au revoir!</div>
+            `;
+        }
+
+        function renderQuiz() {
+            const area = document.getElementById('quizArea');
+            area.innerHTML = '';
+            quizData.forEach((item, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'quiz-q';
+                qDiv.innerHTML = `<p><strong>${idx + 1}. ${item.q}</strong></p><div class="quiz-opts" id="q${idx}"></div>`;
+                
+                const optsDiv = qDiv.querySelector(`#q${idx}`);
+                item.opts.forEach((opt, optIdx) => {
+                    const lbl = document.createElement('label');
+                    lbl.innerHTML = `<input type="radio" name="q${idx}" value="${optIdx}"> ${opt}`;
+                    optsDiv.appendChild(lbl);
+                });
+                area.appendChild(qDiv);
+            });
+        }
+
+        function checkQuiz() {
+            let score = 0;
+            quizData.forEach((item, idx) => {
+                const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+                const parent = document.getElementById(`q${idx}`);
+                
+                if (selected) {
+                    if (parseInt(selected.value) === item.correct) {
+                        score++;
+                        parent.style.color = "green";
+                    } else {
+                        parent.style.color = "red";
+                    }
+                }
+            });
+            
+            const fb = document.getElementById('quizFeedback');
+            if (score === quizData.length) fb.textContent = "🌟 Excellent! You are ready to travel!";
+            else if (score >= 4) fb.textContent = "👍 Well done! Just a few small errors.";
+            else fb.textContent = "📖 Keep practicing! Try the dialogue generator again.";
+        }
+
+        // --- NAVIGATION ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function changeSlide(dir) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide += dir;
+            currentSlide = Math.max(0, Math.min(slides.length - 1, currentSlide));
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === slides.length - 1;
+            document.getElementById('slideIndicator').textContent = `${currentSlide + 1} / ${slides.length}`;
+
+            // Refresh dynamic content on slide enter
+            if(currentSlide === 3) updateDialogue();
+            if(currentSlide === 4) checkQuiz(); // reset or just leave as is
+        }
+
+        // --- INIT ---
+        function init() {
+            renderVocab();
+            renderPhrases();
+            renderQuiz();
+            
+            // Listeners for Slide 4
+            document.getElementById('transportSelect').addEventListener('change', updateDialogue);
+            document.getElementById('citySelect').addEventListener('change', updateDialogue);
+            updateDialogue();
+
+            // Button for Quiz check inside the quiz slide if we want, 
+            // but let's add it via DOM injection for cleaner layout
+            const quizBtn = document.createElement('button');
+            quizBtn.textContent = "✅ Check Answers";
+            quizBtn.style.marginTop = "15px";
+            quizBtn.style.width = "100%";
+            quizBtn.onclick = checkQuiz;
+            document.getElementById('slide5').appendChild(quizBtn);
+        }
+
+        init();
+    </script>
+</body>
+</html>
