@@ -46,6 +46,10 @@
             padding: 15px 30px;
             background: #fff;
             border-bottom: 2px solid #eee;
+            cursor: pointer;
+        }
+        .logo-header:hover {
+            background: #f9f9f9;
         }
         .logo { width: 50px; height: 50px; object-fit: contain; border-radius: 50%; border: 2px solid #eee; }
         .logo-header h1 { font-size: 1.2rem; color: var(--primary); font-weight: 700; }
@@ -156,7 +160,7 @@
 </head>
 <body>
     <div class="app-container">
-        <header class="logo-header">
+        <header class="logo-header" onclick="currentSlide = 0; changeSlide(0);">
             <!-- Local logo file -->
             <img src="logo.png" alt="MUDRO Logo" class="logo" onerror="this.style.display='none'">
             <h1>MUDRO Interactive School</h1>
@@ -373,6 +377,12 @@
             const time = document.getElementById('timeSelect').value;
             const display = document.getElementById('dialogueDisplay');
 
+            // French number words mapping (1-10)
+            const frenchNumbers = {
+                '1': 'un', '2': 'deux', '3': 'trois', '4': 'quatre', '5': 'cinq',
+                '6': 'six', '7': 'sept', '8': 'huit', '9': 'neuf', '10': 'dix'
+            };
+
             // Mapping transport to location type
             const locationMap = {
                 'le train': 'la gare',
@@ -404,16 +414,21 @@
             const location = locationMap[transport] || 'la gare';
             const platformName = platformNameMap[location] || 'quai';
 
+            // Get French word forms
+            const priceWord = frenchNumbers[price] || price;
+            const platformWord = frenchNumbers[platform] || platform;
+            const timeWord = frenchNumbers[time] || time;
+
             display.innerHTML = `
                 <div class="d-line"><strong>👨‍💼 Caissier:</strong> Bonjour ! Destination ?</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> Bonjour ! Je voudrais un billet pour <strong>${city}</strong>.</div>
                 <div class="d-line"><strong>👨‍💼 Caissier:</strong> Aller simple ou aller-retour ?</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> Aller-retour, s'il vous plaît. C'est combien ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> C'est <strong>${price} euros</strong>.</div>
+                <div class="d-line"><strong>👨‍💼 Caissier:</strong> C'est <strong>${price} euros (${priceWord})</strong>.</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> D'accord. Voilà. Où est le ${platformName} ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Voilà votre billet. <strong>${cleanTransport}</strong> est à <strong>${platformName} numéro ${platform}</strong>.</div>
+                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Voilà votre billet. <strong>${cleanTransport}</strong> est à <strong>${platformName} numéro ${platform} (${platformWord})</strong>.</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> Quelle heure est-il ?</div>
-                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Il est <strong>${time} heures</strong>. Bon voyage !</div>
+                <div class="d-line"><strong>👨‍💼 Caissier:</strong> Il est <strong>${time} heures (${timeWord})</strong>. Bon voyage !</div>
                 <div class="d-line"><strong>👩 Voyageur:</strong> Merci beaucoup ! Au revoir !</div>
             `;
         }
